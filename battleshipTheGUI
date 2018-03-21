@@ -1,0 +1,62 @@
+from Tkinter import *
+
+class Game():
+    def __init__(self):
+        pass
+        
+    def createButtons(self,add):
+        for x in range(10):
+            for y in range(10):
+                name =''
+                if x ==0:
+                    name = 'A '
+                elif x ==1:
+                    name = 'B '
+                elif x == 2:
+                    name = 'C '
+                elif x == 3:
+                    name = 'D '
+                elif x == 4:
+                    name = 'E '
+                elif x == 5:
+                    name = 'F '
+                elif x == 6:
+                    name = 'G '
+                elif x == 7:
+                    name = 'H '
+                elif x == 8:
+                    name = 'I '
+                elif x == 9:
+                    name = 'J '
+                if y ==0:
+                    name += '1'
+                elif y ==1:
+                    name += '2'
+                elif y == 2:
+                    name += '3'
+                elif y == 3:
+                    name += '4'
+                elif y == 4:
+                    name += '5'
+                elif y == 5:
+                    name += '6'
+                elif y == 6:
+                    name += '7'
+                elif y == 7:
+                    name += '8'
+                elif y == 8:
+                    name += '9'
+                elif y == 9:
+                    name += '10'
+                root.buttons = [x + 10*y]
+                submitButton = Button(root, text=name)
+                submitButton.grid(row=x + add,column=y)
+
+game = Game()
+root = Tk()
+root.buttons = []
+
+game.createButtons(0)
+game.createButtons(10)
+
+root.mainloop()
