@@ -5,7 +5,7 @@ class Game():
         pass
         
     def createButtons(self,add):
-        for x in range(10):
+        for x in range(11):
             for y in range(10):
                 name =''
                 if x ==0:
@@ -48,15 +48,14 @@ class Game():
                     name += '9'
                 elif y == 9:
                     name += '10'
-                root.buttons = [x + 10*y]
                 submitButton = Button(root, text=name)
-                submitButton.grid(row=x + add,column=y)
+                submitButton.grid(row=x+add,column=y)
 
 game = Game()
 root = Tk()
-root.buttons = []
 
 game.createButtons(0)
 game.createButtons(10)
+
 
 root.mainloop()
