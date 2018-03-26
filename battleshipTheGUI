@@ -1,5 +1,5 @@
 from Tkinter import *
-
+from PIL import ImageTk, Image
 class Game():
     def __init__(self):
         pass
@@ -11,6 +11,8 @@ class Game():
                 name += root.yDictionary[y]
                 submitButton = Button(root, text=name)
                 submitButton.grid(row=x+add,column=y)
+                img = ImageTk.PhotoImage(Image.open('BattleWater.jpg'))
+                Button.config(image=img,compound=RIGHT)
 
 game = Game()
 root = Tk()
