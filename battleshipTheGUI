@@ -6,7 +6,7 @@ class Game():
         pass
       
     def place(self,x ,y):
-        pass   
+        pass
             
     def createButtons(self):
         for x in range(21):
@@ -15,14 +15,16 @@ class Game():
                 if name != '  ':
                     name += root.yDictionary[y]
                 else:
-                    name = '   '
+                    name = '      '
                 submitButton = Button(root, text=name, command = lambda x = x, y = y: game.place(x,y))
                 submitButton.grid(row=x,column=y)
-
+                if x != 10:
+                    submitButton.config(bg = 'light blue')
+                
 game = Game()
 root = Tk()
-root.xDictionary = {0:'A ',1:'B ',2:'C ',3:'D ',4:'E ',5:'F ',6:'G ',7:'H ',8:'I ',9:'J ',10:'  ',
-                   11:'A ',12:'B ',13:'C ',14:'D ',15:'E ',16:'F ',17:'G ', 18:'H ', 19:'I ', 20:'J '}
+root.xDictionary = {0:'A ',1:'B ',2:'C ',3:'D ',4:'E ',5:'F ',6:'G ',7:'H ',8:' I ',9:' J ',10:'  ',
+                   11:'A ',12:'B ',13:'C ',14:'D ',15:'E ',16:'F ',17:'G ', 18:'H ', 19:' I ', 20:' J '}
 root.yDictionary = {0:'1',1:'2',2:'3',3:'4',4:'5',5:'6',6:'7',7:'8',8:'9',9:'10'}
 
 
