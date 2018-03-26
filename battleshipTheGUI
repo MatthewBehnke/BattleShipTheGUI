@@ -1,27 +1,32 @@
 from Tkinter import *
 from PIL import ImageTk, Image
+
 class Game():
     def __init__(self):
         pass
-        
-    def createButtons(self,add):
-        for x in range(10):
+      
+    def place(self,x ,y):
+        pass   
+            
+    def createButtons(self):
+        for x in range(21):
             for y in range(10):
                 name = root.xDictionary[x]
-                name += root.yDictionary[y]
-                submitButton = Button(root, text=name)
-                submitButton.grid(row=x+add,column=y)
-                img = ImageTk.PhotoImage(Image.open('BattleWater.jpg'))
-                Button.config(image=img,compound=RIGHT)
+                if name != '  ':
+                    name += root.yDictionary[y]
+                else:
+                    name = '   '
+                submitButton = Button(root, text=name, command = lambda x = x, y = y: game.place(x,y))
+                submitButton.grid(row=x,column=y)
 
 game = Game()
 root = Tk()
-root.xDictionary = {0:'A ',1:'B ',2:'C ',3:'D ',4:'E ',5:'F ',6:'G ',7:'H ',8:'I ',9:'J '}
+root.xDictionary = {0:'A ',1:'B ',2:'C ',3:'D ',4:'E ',5:'F ',6:'G ',7:'H ',8:'I ',9:'J ',10:'  ',
+                   11:'A ',12:'B ',13:'C ',14:'D ',15:'E ',16:'F ',17:'G ', 18:'H ', 19:'I ', 20:'J '}
 root.yDictionary = {0:'1',1:'2',2:'3',3:'4',4:'5',5:'6',6:'7',7:'8',8:'9',9:'10'}
 
 
-game.createButtons(0)
-game.createButtons(11)
+game.createButtons() #creating the buttons for the bot to control
 
 
 root.mainloop()
