@@ -1,5 +1,8 @@
-from Tkinter import *
-          
+ffrom Tkinter import *
+   
+def place(x,y):
+    print str(x) + str(y)      
+                        
 root = Tk()
 root.xDictionary = {0:'A ',1:'B ',2:'C ',3:'D ',4:'E ',5:'F ',6:'G ',7:'H ',8:' I ',9:' J ',10:'  ',
                    11:'A ',12:'B ',13:'C ',14:'D ',15:'E ',16:'F ',17:'G ', 18:'H ', 19:' I ', 20:' J '}
@@ -14,10 +17,8 @@ for x in range(21):
             nameOfButton += root.yDictionary[y]
         else:
             nameOfButton = '      '
-        allButtons[x].append(Button(root,text=nameOfButton,command= lambda x = x, y = y: place(x,y)))
+        allButtons[x].append(Button(root,text=nameOfButton,height = 1,width = 3,command= lambda x = x, y = y: place(x,y)))
         allButtons[x][y].grid(row=x,column=y)
-        #allButtons[x] += [Button(root, text=nameOfButton, command = lambda x = x, y = y: place(x,y))]
-        #allButtons[x].grid(row=x,column=y)
         if x != 10:
             allButtons[x][y].config(bg = 'light blue')
 
