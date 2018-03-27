@@ -1,7 +1,7 @@
-ffrom Tkinter import *
+from Tkinter import *
    
 def place(x,y):
-    print str(x) + str(y)      
+    allButtons[x][y].config(bg = 'blue')     
                         
 root = Tk()
 root.xDictionary = {0:'A ',1:'B ',2:'C ',3:'D ',4:'E ',5:'F ',6:'G ',7:'H ',8:' I ',9:' J ',10:'  ',
@@ -22,5 +22,9 @@ for x in range(21):
         if x != 10:
             allButtons[x][y].config(bg = 'light blue')
 
+labeltext = StringVar()
+labeltext.set('hey')
+L1 = Label(root, textvariable = labeltext)
+L1.grid(row = 22, column = 0)
 
 root.mainloop()
