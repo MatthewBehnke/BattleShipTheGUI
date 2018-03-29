@@ -1,71 +1,120 @@
-from Tkinter import *
-import random
-
-def lookUp(x, y):       # Function that takes coordinates and
-  if x == 0 and y == 0: # places it on the array
-    return 0 
-  else:
-    return (x*6) +  y
+from Tkinter import *  # importing Tkinter to use to create a gui
+import random  # importing random to create a ai for the player
 
 
-def shoot(x,y):
-    #if x < 10 and x > -1:
-    #    if y < 10 and y > -1:
-    #        hiddenButtonsBot[x][y] = 'H'
-    #        print hiddenButtonsBot[x][y]
-    print hiddenButtonsBot
+def won(Who): # defining won to be called when either the player or the bot has won
+    if Who == 'Bot':  # if the bot has won
+        print 'bot won'  # printing that the bot has won
+    elif Who == 'player':  # if the human player has won
+        print 'Player won'  # print that the human has won
+    for z in range(21):  # repeating 21 times to loop through all of the buttons in the array
+        for c in range(10):  # looping through each row in the array
+            allButtons[z][c].destroy()  # removing all of the buttons from the screen
+    labelText2 = StringVar()  # creating a label to print who has won
+    labelText2.set(str(Who) + ' won') # setting the label to who was won
+    root.labelText.set('won')  # setting the other label to who has won
+    L2 = Label(root, textvariable=labelText2)  # setting the value to the label
+    L2.grid(row=22, columnspan=30)  # placing the label on the grid
 
-def place(x,y):
-    #human placing 
-    if root.shipOn < 3: 
-        if x > 10 and x <22:
-            if y > -1 and y <10:
-                labeltext.set('place ship '+ str(root.shipOn))
-                root.shipOn = root.shipOn + 1
-                for z in range(4):
-                    allButtons[x][y + z].config(bg = 'blue')
-                    root.playerShips = []
-                    #root.playerShips = root.playerShips[root.shipOn][z] 
-    else:
-        for z in range(21):
-            for c in range(10):        
-                allButtons[z][c].config(command = lambda z = z, c = c: shoot(z,c))
-    #bot placing 
-    for botshipOn in range(1):
-        botShipx = random.randint(0,5)
-        botShipy = random.randint(0,5)
-        for z in range(1):
-            hiddenButtonsBot[botShipx][botShipy+z] = 'H'
-                        
-root = Tk()
-root.xDictionary = {0:'A ',1:'B ',2:'C ',3:'D ',4:'E ',5:'F ',6:'G ',7:'H ',8:' I ',9:' J ',10:'  ',
-                   11:'A ',12:'B ',13:'C ',14:'D ',15:'E ',16:'F ',17:'G ', 18:'H ', 19:' I ', 20:' J '}
-root.yDictionary = {0:'1',1:'2',2:'3',3:'4',4:'5',5:'6',6:'7',7:'8',8:'9',9:'10'}
-root.playerShips = []
-root.shipOn = 0
 
-hiddenButtonsPlayer = []
-hiddenButtonsBot = []
-allButtons = list()
-for x in range(21):
-    hiddenButtonsPlayer.append([])
-    hiddenButtonsBot.append([])
-    allButtons.append(list())
-    for y in range(10):
-        nameOfButton = root.xDictionary[x]
-        if nameOfButton != '  ':
-            nameOfButton += root.yDictionary[y]
-        else:
-            nameOfButton = '      '
-        hiddenButtonsPlayer[x].append('-')
-        hiddenButtonsBot[x].append('-')
-        allButtons[x].append(Button(root,text=nameOfButton,height = 1,width = 3,command= lambda x = x, y = y: place(x,y)))
-        allButtons[x][y].grid(row=x,column=y)
-        if x != 10:
-            allButtons[x][y].config(bg = 'light blue')
-labeltext = StringVar()
-labeltext.set('place ship')
-L1 = Label(root, textvariable = labeltext)
-L1.grid(row = 22, columnspan = 30)
+def botShoot(): # function for the bot to shoot
+    botShipx = random.randint(11, 20)  # creating a random value fot the bot to shoot
+    botShipy = random.randint(0, 9)  # creating a random value fot the bot to shoot
+    if hiddenButtonsPlayer[botShipx][botShipy] != 'M':  # if the random value if not a miss already
+        if hiddenButtonsPlayer[botShipx][botShipy] == 'S':  # if there is a ship on the random spot shosen by the bot
+            allButtons[botShipx][botShipy].config(bg='red')  # seting the background to red
+            root.numberOfBotHit = root.numberOfBotHit + 1  # adding 1 to the number of ships hit
+        else:  # if there is not a ship at the spot
+            hiddenButtonsPlayer[botShipx][botShipy] = 'M'  # change the hidden list to a miss in the spot
+            allButtons[botShipx][botShipy].config(bg='green')  # change the background to green
+    else:  # if the spot has already been hit
+        botShoot()  # recall the function
 
-root.mainloop()
+
+def shoot(x, y): # function to handle the shooting
+    if root.numberOfBotHit == root.numberOfBotPlaces: # check if the bot has won
+        won('Bot')  # if the bot has won the call the won function with bot as an argument
+    elif root.numberOfPlayerHit == root.numberOfPlayerPlaces: # check if the human has won
+        won('Player') # if the human has won then call the won function
+    else: # if neither player has won
+        if x < 10 and x > -1: # if the values are in the right areas
+           if y < 10 and y > -1:  # if the values are in the right areas
+                if hiddenButtonsBot[x][y] == 'S':  # check if the place has a  ship
+                    hiddenButtonsPlayer[x][y] = 'H'  # change to a hit
+                    root.numberOfPlayerHit = root.numberOfPlayerHit + 1  # add 1 to the number of hits
+                    allButtons[x][y].config(bg = 'red')  # change the background to red
+                else:  # if not hit
+                    hiddenButtonsBot[x][y] = 'M'  # change to a mis
+                    allButtons[x][y].config(bg = 'green')  # change background to green
+        botShoot() # call the bot shooting function
+
+
+def botPlace():  # the bot place function to place the ships for the bot
+    if root.shipOn != 3:  # if the ship the bot is on is not 3
+        botShipx = random.randint(0, 8)  # generage a random value 0 to 8
+        botShipy = random.randint(0, 5)  # generage a random value o to 5
+        if hiddenButtonsBot[botShipx][botShipy] != 'S':  # if the but does already have a ship on the spot
+            for z in range(4):  # loop 4 times for each place in the ship
+                hiddenButtonsBot[botShipx][botShipy + z] = 'S'  # change the button to a  ship
+                root.numberOfBotPlaces = root.numberOfBotPlaces + 1  # add one ot the the number of the bots placed
+
+        else:  # if  a ship
+            botShoot()  # recall the function
+
+
+def place(x, y):  # the placing function
+    # human placing
+    if root.shipOn < 3: # if the ship is on less than 3
+        if x > 10 and x < 22 and y > -1 and y < 10:  # if the varables are in range
+            root.labelText.set('place ships')  # changing the label to place ships
+            root.shipOn = root.shipOn + 1  # adding one to the ship the function is on
+            for z in range(4):  # repeate 4 times for each ship spot
+                allButtons[x][y + z].config(bg='blue')  # change background to blue
+                hiddenButtonsPlayer[x][y + z] = 'S'  # add one to each loop through and add to list
+                root.numberOfPlayerPlaces = root.numberOfPlayerPlaces + 1  # add one to the number of ship spots
+
+    else:  # if other than 3 or less
+        for z in range(21):  # repeate 21 times for each colum in the button array
+            for c in range(10):  # loop though each row
+                allButtons[z][c].config(command=lambda z=z, c=c: shoot(z, c)) # changing the buttons to chose a dif command
+    # bot placing
+    botPlace()  # calling the bot placing function
+
+
+root = Tk()  # puting  root as Tk()
+
+
+root.xDictionary = {0: 'A ', 1: 'B ', 2: 'C ', 3: 'D ', 4: 'E ', 5: 'F ', 6: 'G ', 7: 'H ', 8: ' I ', 9: ' J ',
+                    10: '  ', 11: 'A ', 12: 'B ', 13: 'C ', 14: 'D ', 15: 'E ', 16: 'F ', 17: 'G ', 18: 'H ', 19: ' I ',
+                    20: ' J '}  # a dictinary for the x values
+root.yDictionary = {0: '1', 1: '2', 2: '3', 3: '4', 4: '5', 5: '6', 6: '7', 7: '8', 8: '9', 9: '10'}  # dictionary for y
+root.shipOn = 0  # what ship the code is on
+root.numberOfBotPlaces = 0  # the number of bots placed
+root.numberOfPlayerPlaces = 0  # the number of players placed
+root.numberOfBotHit = 0  # the number of bots hit
+root.numberOfPlayerHit = 0  # the number of players hit
+hiddenButtonsPlayer = []  # array to track the players ships
+hiddenButtonsBot = []  # array to track the bots ships
+allButtons = list()  # array to call buttons
+for x in range(21):  # looping through each row
+    hiddenButtonsPlayer.append([])  # adding an array to each row
+    hiddenButtonsBot.append([])  # adding an array to each row
+    allButtons.append(list())  # adding a list to the all buttons array
+    for y in range(10):  # repeating 10 times for each colum
+        nameOfButton = root.xDictionary[x]   # changing the name of the buton
+        if nameOfButton != '  ':  # if not its a certin condition then
+            nameOfButton += root.yDictionary[y]  # change the name of the button
+        else:  # if the condition
+            nameOfButton = '      '  # change how its displayed
+        hiddenButtonsPlayer[x].append('-')  # adding - to each place in the arrays
+        hiddenButtonsBot[x].append('-')  # adding - to eac spot in the arrays
+        # creating each button in the array for the root object and changing the high and width the calling the function
+        allButtons[x].append(Button(root, text=nameOfButton, height=1, width=3, command=lambda x=x, y=y: place(x, y)))
+        allButtons[x][y].grid(row=x, column=y)  # placing the button on to the grid
+        if x != 10:  # if  the row is not row 10
+            allButtons[x][y].config(bg='light blue')  # change the background to blue
+root.labelText = StringVar()  # creating the var for the label
+root.labelText.set('place ship')  # changing the value of the var
+L1 = Label(root, textvariable=root.labelText)  # creating the label
+L1.grid(row=22, columnspan=30)  # placing the lable in the grid
+root.mainloop()  # runing the main loop
